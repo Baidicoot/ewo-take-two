@@ -22,6 +22,7 @@ executable EWO-redo
     Game.Engine.Entity
     Game.Engine.State
     Game.Engine.Terrain
+    Game.Engine.Render
     Misc
   -- other-extensions:
   build-depends:

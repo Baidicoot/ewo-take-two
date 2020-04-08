@@ -10,6 +10,6 @@ coordSqDist (_, x, y) (_, a, b) = (x - a) ^ 2 + (y - b) ^ 2
 
 type RegionIndex = (Int, Int, Int) -- level, x, y
 
-newtype DeltaTime = DeltaTime Float
+type DeltaTime = Float
 
 type SenderID = T.Text

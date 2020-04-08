@@ -11,6 +11,7 @@ data Event
     | SpawnEvent Int SpawnData
     | KeyEvent SenderID Char
     -- ...
+    deriving(Show)
 
 data Input
     = Keypress SenderID Char
@@ -20,8 +21,9 @@ data Input
 data Request
     = Load RegionIndex
     | Drop RegionIndex
+    deriving(Show, Eq, Ord)
 
-data SpawnData = SpawnData (Maybe SenderID) (Int, Int)
+data SpawnData = SpawnData (Maybe SenderID) (Int, Int) deriving(Show)
 
 data EntitySight = EntitySight [Entity]
 

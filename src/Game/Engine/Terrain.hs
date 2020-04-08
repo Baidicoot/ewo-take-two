@@ -1,7 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Game.Engine.Terrain where
 import qualified Data.Vector as V
-import qualified Data.Map.Strict as Map
 import Game.Engine.Common
 
 regionSize :: Int
@@ -25,7 +24,7 @@ regionOffset c@(lv, x, y) = let (_, ix, iy) = regionIndex c in (lv, x - (regionS
 indexTile :: Coord -> Region -> Maybe Tile
 indexTile = indexOffsetTile . regionOffset -- takes global coord
 
-data Direction = N | S | E | W
+data Direction = N | S | E | W deriving(Show)
 data Quadrat =  NE | EN | ES | SE | SW | WS | WN | NW
 
 nextCoord :: Direction -> Coord -> Maybe PortalData -> Coord
@@ -48,3 +47,9 @@ getDirections SW = (S, W)
 getDirections WS = (W, S)
 getDirections WN = (W, N)
 getDirections NW = (N, W)
+
+getQuadrats :: Direction -> (Quadrat, Quadrat)
+getQuadrats N = (NE, NW)
+getQuadrats S = (SE, SW)
+getQuadrats E = (EN, ES)
+getQuadrats W = (WN, WS)
