@@ -6,16 +6,20 @@ import Game.Engine.Common
 import Game.Engine.Entity
 
 import System.IO
-import System.Process
 import Control.Monad
 import Control.Concurrent (threadDelay)
 import Data.IORef
+import System.Console.ANSI
 import Data.List (intercalate)
 import qualified Data.Map as Map
 import qualified Data.Vector as V
 
 reg :: Region
-reg = Region . V.fromList $ map (\c -> (c, Nothing)) $ take 65536 (concat (repeat "abcde"))
+reg = Region . V.fromList $ map (\c ->
+    if c == 'z' then
+        (c, Just ((0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)))
+    else
+        (c, Nothing)) $ take 65536 (concat (repeat "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy"))
 
 empty :: State
 empty = State { regions = Map.empty, entities = [], events = [], spawners = Map.empty }
@@ -23,7 +27,7 @@ empty = State { regions = Map.empty, entities = [], events = [], spawners = Map.
 state :: State
 state = tick 0.0 [Loaded (0, 0, 0) reg []] empty
 
-splitEvery :: Int -> [a] -> [[a]]
+splitEvery :: Int -> [a] -> [[a]] 
 splitEvery _ [] = []
 splitEvery n list = first : (splitEvery n rest)
   where
