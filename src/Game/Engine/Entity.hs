@@ -4,6 +4,7 @@
 module Game.Engine.Entity where
 import Game.Engine.Common
 import Game.Engine.Terrain
+import Game.Save.Saveable
 
 data Event
     = Broadcast String String
@@ -36,7 +37,8 @@ data EntityS s = EntityS { -- add serializability!
     _data :: EntityData
 }
 
-data Entity = forall s. Entity (EntityS s)
+data Entity = forall s. (Saveable s) => Entity (EntityS s)
+
 update :: Entity -> EntitySight -> DeltaTime -> [Event] -> (Entity, [Event])
 update (Entity e) s dt es = let (e', es') = _update e s dt (_state e) es in (Entity e', es')
 

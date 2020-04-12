@@ -64,7 +64,7 @@ coordChar start dat = case internal of
             return ch
 
 emptyChar :: Char
-emptyChar = ' '
+emptyChar = '.'
 
 doMoves :: Coord -> Map.Map RegionIndex Region -> [Direction] -> (Char, Maybe Request)
 doMoves start dat (m:ms) = case step m start dat of
@@ -75,7 +75,7 @@ doMoves start dat [] = case coordChar start dat of
     Right ch -> (ch, Nothing)
 
 playerLookDist :: Int
-playerLookDist = 3
+playerLookDist = 10
 
 playerLookDirections :: [[Direction]]
 playerLookDirections = map (genMoves (0, 0)) [(x, y) | x <- range, y <- range]
