@@ -4,7 +4,7 @@
 module Game.Engine.Entity where
 import Game.Engine.Common
 import Game.Engine.Terrain
-import Game.Save.Common
+import Game.Save.Saveable
 
 data Event
     = Broadcast String String

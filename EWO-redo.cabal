@@ -25,6 +25,7 @@ executable EWO-redo
     Game.Engine.Render
     Game.Save.Entity
     Game.Save.Common
+    Game.Save.Saveable
     Misc
     Demo
   -- other-extensions:

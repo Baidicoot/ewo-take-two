@@ -1,5 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 module Game.Save.Entity where
+import Game.Save.Saveable
 import Game.Save.Common
 import Game.Engine.Entity
 

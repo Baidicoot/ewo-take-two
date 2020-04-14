@@ -1,19 +1,13 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
 module Game.Save.Common where
 import qualified Data.ByteString as B
-import Data.ByteString.Internal (w2c, c2w)
+-- import Data.ByteString.Internal (w2c, c2w) -- DEBUG STUFF
 import Data.Word
 import Data.Bits
 
-type Loader c v = c -> B.ByteString -> Maybe v -- loader function with config
-type Saver c v = c -> v -> B.ByteString
-
-class ExistsSaver s where
-    saver :: Saver () s
-
-class Saveable s i o where
-    save :: o -> Saver i s
-    load :: i -> Loader o s
+import Game.Save.Saveable
 
 parseInt16 :: B.ByteString -> Maybe (Int, B.ByteString)
 parseInt16 str = do
@@ -44,6 +38,10 @@ saveMultiple fn config (v:vs) =
             str0 `B.append` str1
 saveMultiple _ _ [] = B.empty
 
+instance (Saveable a b c) => Saveable [a] b c where
+    save _ = saveMultiple (save undefined)
+    load _ = loadMultiple (load undefined)
+
 loadPair :: Loader a b -> Loader c d -> Loader (a, c) (b, d)
 loadPair f0 f1 (a, c) str = do
     (len, str') <- parseInt16 str
@@ -58,10 +56,18 @@ savePair f0 f1 (a, c) (b, d) =
         (l0, l1) = unparseInt16 (B.length str0) in
             l0 `B.cons` l1 `B.cons` str0 `B.append` str1
 
-{- DEBUG THINGS
-saveString :: Saver () String
-saveString _ = B.pack . map c2w
+instance (Saveable a b c, Saveable d e f) => Saveable (a, d) (b, e) (c, f) where
+    save _ = savePair (save undefined) (save undefined)
+    load _ = loadPair (load undefined) (load undefined)
 
-loadString :: Loader () String
-loadString _ = Just . map w2c . B.unpack
+{- DEBUG STUFF
+saveChar :: Saver () Char
+saveChar _ = B.singleton . c2w
+
+loadChar :: Loader () Char
+loadChar _ = Just . w2c . B.head
+
+instance Saveable Char () () where
+    save _ = saveChar
+    load _ = loadChar
 -}
