@@ -4,7 +4,7 @@
 module Game.Engine.Entity where
 import Game.Engine.Common
 import Game.Engine.Terrain
-import Game.Save.Saveable
+import Game.Save.Common
 
 data Event
     = Broadcast String String
@@ -30,14 +30,14 @@ data EntitySight = EntitySight [Entity]
 
 data EntityData = EntityData Int Coord Bool Bool (Maybe SenderID)
 
-data EntityS s = EntityS { -- add serializability!
+data EntityS s = EntityS {
     _state :: s,
     _update :: EntitySight -> DeltaTime -> s -> [Event] -> (EntityS s, [Event]),
     _render :: [(Coord, Char)],
     _data :: EntityData
 }
 
-data Entity = forall s. (Saveable s) => Entity (EntityS s)
+data Entity = forall s. (ExistsSaver s) => Entity (EntityS s)
 
 update :: Entity -> EntitySight -> DeltaTime -> [Event] -> (Entity, [Event])
 update (Entity e) s dt es = let (e', es') = _update e s dt (_state e) es in (Entity e', es')

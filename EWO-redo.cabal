@@ -23,7 +23,8 @@ executable EWO-redo
     Game.Engine.State
     Game.Engine.Terrain
     Game.Engine.Render
-    Game.Save.Saveable
+    Game.Save.Entity
+    Game.Save.Common
     Misc
     Demo
   -- other-extensions:
